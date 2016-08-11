@@ -1,0 +1,27 @@
+/*css
+*/
+body {
+  background-color: #666;
+}
+
+.index-page-single, .header,.footer {
+  text-align: center;
+}
+
+.index-page-single {
+  margin-top: -3px;
+  border: 3px dashed #fff;
+  background-color: limegreen;
+}
+
+#myCarousel {
+  background-color: #fff;
+  height: 250px;
+  border: 3px dashed limegreen;
+}
+
+#build-sliders.carousel-inner .item img {
+  height: 244px;
+  width: auto;
+  margin: 0 auto;
+}
