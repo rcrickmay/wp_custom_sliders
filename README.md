@@ -1,6 +1,93 @@
 # wp_custom_sliders
 Custom Sliders for each page in WP based on WP post/page-slug and a single custom variable
 
+
+//*****************************//
+//******** Version 0.2 ********//
+//*****************************//
+- Reduced code complexity by reducing multiple dependencies
+- Removed dependence on Page_Slug
+- Changed WP Custom Variable 'custom_sliders' to respond to a folder name directly rather than look for 'unique', 'generic', and etc.
+- The value of the 'custom_sliders' WP Custom Variable will be stored as the session variable $_SESSION['custom_sliders'], and this value will correlate exactly with the folder of the same name, where slides are stored
+- Removed upper- lower- case dependencies
+- Added DESTORY SESSION to php code block, once sliders are loaded
+
+Example of reduction below:
+
+NEW 'getimages.php' code block:
+$dir = strtolower($_SESSION['se_custom_sliders']);
+
+PREVIOUS 'getimages.php' code block:
+$dir = strtolower($_SESSION['se_page_slug']);
+
+
+NEW 'page.php' code block:
+//-------------------------------
+
+<!-- GET SILDER -->
+<?php
+    //Get meta data to check if page has slides
+    //page will load unique slides if '$key_name' is
+    //'use_slides' and '$key_value' = ['sliders_folder_name']
+    //otherwise default (blank) slides load
+    $key_value = get_post_meta( get_the_ID(), 'custom_sliders', true );
+    $_SESSION['se_custom_sliders'] = strtolower($key_value);
+
+    if ( ! empty( $key_value ) ) {
+      get_template_part( 'sliders/sliders', 'custom' );
+    }
+
+?>
+
+-------------------------------//
+
+
+PREVIOUS 'page.php' code block:
+//-------------------------------
+
+<!-- GET SILDER -->
+<?php
+    //Get post variables
+    //store post_slug in session to get slides
+    global $post; 
+    $page_slug = $post -> post_name;
+    $_SESSION['se_page_slug'] = strtolower($page_slug);
+    
+    //Get meta data to check if page has slides
+    //page will load unique slides if '$key_1_name' is
+    //'use_slides' and '$key_1_value' = 'unique'
+    //otherwise default (blank) slides load
+    $key_1_value = get_post_meta( get_the_ID(), 'custom_sliders', true );
+    $confirm_custom = 'custom';
+?>
+
+<?php
+//CUSTOM SLIDER CONDITIONS 
+    if ( ! empty( $key_1_value ) ) {
+        
+      if ( $key_1_value == $confirm_custom ) {
+          $_SESSION['se_custom_sliders'] = strtolower($key_1_value);
+          get_template_part( 'sliders/sliders', $_SESSION['se_custom_sliders'] );
+        } else {
+          get_template_part( 'sliders/sliders-generic' );
+      }
+      
+    } else {
+        get_template_part( 'sliders/sliders' );
+    }   
+    
+?>
+
+-------------------------------//
+
+
+
+
+
+//*****************************//
+//******** Version 0.1 ********//
+//*****************************//
+
 FILE TREE:
   - THEME:
     "/wp_custom_sliders"
